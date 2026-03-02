@@ -18,12 +18,14 @@ The goal is to build a clean, reliable tool that works well for a small team (~1
 * Sequelize ORM
 * PostgreSQL
 * JWT Authentication
+* Run Command : npm run dev OR npm start
 
 ### Frontend
 
 * React + Vite
 * Axios for API calls
 * TailwindCSS or simple CSS
+* Run Command : npm run dev
 
 ---
 
