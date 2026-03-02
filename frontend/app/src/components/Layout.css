@@ -239,4 +239,20 @@
     .mobile-toggle {
         display: block;
     }
+
+    .sidebar-overlay {
+        display: block !important;
+    }
+
+    .topbar {
+        padding: 0 var(--space-3);
+    }
+
+    .topbar-title {
+        font-size: var(--font-size-base);
+    }
+
+    .page-content {
+        padding: var(--space-3);
+    }
 }
