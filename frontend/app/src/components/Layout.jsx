@@ -2,6 +2,7 @@ import { Outlet, NavLink, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
+import AIChatbot from './AIChatbot';
 import './Layout.css';
 
 export default function Layout() {
@@ -132,6 +133,9 @@ export default function Layout() {
                     onClick={() => setSidebarOpen(false)}
                 />
             )}
+
+            {/* AI Chatbot */}
+            <AIChatbot />
         </div>
     );
 }

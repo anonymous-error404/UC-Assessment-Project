@@ -7,6 +7,7 @@ import issueRoutes from "./routes/issue.routes.js";
 import projectRoutes from "./routes/project.routes.js";
 import commentRoutes from "./routes/comment.routes.js";
 import userRoutes from "./routes/user.routes.js";
+import aiRoutes from "./routes/ai.routes.js";
 import { sequelize } from "./models/index.js";
 import { initSocket } from "./socket.js";
 
@@ -28,6 +29,7 @@ app.use("/api/issues", issueRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/comments", commentRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/ai", aiRoutes);
 
 //// TEST ROUTE ////
 app.get("/", (req, res) => {

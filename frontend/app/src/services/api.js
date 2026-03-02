@@ -72,4 +72,11 @@ export const usersAPI = {
     getAll: () => api.get('/users'),
 };
 
+// ---- AI ----
+export const aiAPI = {
+    chat: (message, context) => api.post('/ai/chat', { message, context }),
+    summarizeIssue: (id) => api.get(`/ai/summarize-issue/${id}`),
+    summarizeComments: (id) => api.get(`/ai/summarize-comments/${id}`),
+};
+
 export default api;

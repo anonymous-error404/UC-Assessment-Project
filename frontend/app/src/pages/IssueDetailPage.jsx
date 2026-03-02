@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { issuesAPI, commentsAPI, usersAPI } from '../services/api';
+import { issuesAPI, commentsAPI, usersAPI, aiAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useSocket } from '../hooks/useSocket';
 import './IssueDetailPage.css';
@@ -98,6 +98,36 @@ export default function IssueDetailPage() {
         'issues:changed': () => fetchIssue(),
         'comments:changed': () => fetchIssue(),
     });
+
+    // AI summary states
+    const [issueSummary, setIssueSummary] = useState('');
+    const [commentSummary, setCommentSummary] = useState('');
+    const [issueSummaryLoading, setIssueSummaryLoading] = useState(false);
+    const [commentSummaryLoading, setCommentSummaryLoading] = useState(false);
+
+    const handleIssueSummary = async () => {
+        setIssueSummaryLoading(true);
+        try {
+            const res = await aiAPI.summarizeIssue(id);
+            setIssueSummary(res.data.summary);
+        } catch {
+            setIssueSummary('Failed to generate summary.');
+        } finally {
+            setIssueSummaryLoading(false);
+        }
+    };
+
+    const handleCommentSummary = async () => {
+        setCommentSummaryLoading(true);
+        try {
+            const res = await aiAPI.summarizeComments(id);
+            setCommentSummary(res.data.summary);
+        } catch {
+            setCommentSummary('Failed to generate summary.');
+        } finally {
+            setCommentSummaryLoading(false);
+        }
+    };
 
     const handleAddComment = async (e) => {
         e.preventDefault();
@@ -199,12 +229,52 @@ export default function IssueDetailPage() {
                         </div>
                     </div>
 
+                    {/* AI Issue Summary */}
+                    <div style={{ marginBottom: 'var(--space-4)' }}>
+                        <button
+                            className="btn btn-secondary"
+                            onClick={handleIssueSummary}
+                            disabled={issueSummaryLoading}
+                            style={{ marginBottom: 'var(--space-3)' }}
+                        >
+                            {issueSummaryLoading ? (
+                                <><div className="spinner" /> Generating...</>
+                            ) : '✨ AI Summary'}
+                        </button>
+                        {issueSummary && (
+                            <div className="card" style={{ background: 'var(--color-primary-bg)', borderColor: 'var(--color-primary-border)' }}>
+                                <div style={{ fontSize: 'var(--font-size-xs)', fontWeight: 600, color: 'var(--color-primary)', marginBottom: 'var(--space-2)' }}>AI-Generated Summary</div>
+                                <div style={{ fontSize: 'var(--font-size-sm)', lineHeight: 1.6 }}>{issueSummary}</div>
+                            </div>
+                        )}
+                    </div>
+
                     {/* Comments */}
                     <div className="comments-section">
                         <div className="comments-header">
                             <h2 className="comments-title">Comments</h2>
-                            <span className="comments-count">{comments.length}</span>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+                                <span className="comments-count">{comments.length}</span>
+                                {comments.length > 0 && (
+                                    <button
+                                        className="btn btn-sm btn-secondary"
+                                        onClick={handleCommentSummary}
+                                        disabled={commentSummaryLoading}
+                                    >
+                                        {commentSummaryLoading ? (
+                                            <><div className="spinner" style={{ width: 14, height: 14 }} /> ...</>
+                                        ) : '✨ Summarize'}
+                                    </button>
+                                )}
+                            </div>
                         </div>
+
+                        {commentSummary && (
+                            <div className="card" style={{ background: 'var(--color-primary-bg)', borderColor: 'var(--color-primary-border)', marginBottom: 'var(--space-3)' }}>
+                                <div style={{ fontSize: 'var(--font-size-xs)', fontWeight: 600, color: 'var(--color-primary)', marginBottom: 'var(--space-2)' }}>Discussion Summary</div>
+                                <div style={{ fontSize: 'var(--font-size-sm)', lineHeight: 1.6 }}>{commentSummary}</div>
+                            </div>
+                        )}
 
                         {comments.length === 0 ? (
                             <div className="empty-state" style={{ padding: 'var(--space-8)' }}>
