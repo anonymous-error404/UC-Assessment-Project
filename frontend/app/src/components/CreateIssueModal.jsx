@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { issuesAPI } from '../services/api';
 
-export default function CreateIssueModal({ projects, users, onClose, onCreated }) {
+export default function CreateIssueModal({ projects, users, isManager, onClose, onCreated }) {
     const [form, setForm] = useState({
         title: '',
         description: '',
@@ -42,7 +42,7 @@ export default function CreateIssueModal({ projects, users, onClose, onCreated }
                 projectId: form.projectId,
                 priority: form.priority,
             };
-            if (form.assignedTo) {
+            if (isManager && form.assignedTo) {
                 payload.assignedTo = form.assignedTo;
             }
             await issuesAPI.create(payload);
@@ -119,20 +119,22 @@ export default function CreateIssueModal({ projects, users, onClose, onCreated }
                         </div>
                     </div>
 
-                    <div className="form-group">
-                        <label className="form-label" htmlFor="issue-assignee">Assignee</label>
-                        <select
-                            id="issue-assignee"
-                            className="form-select"
-                            value={form.assignedTo}
-                            onChange={(e) => handleChange('assignedTo', e.target.value)}
-                        >
-                            <option value="">Unassigned</option>
-                            {users.map(u => (
-                                <option key={u.id} value={u.id}>{u.name}</option>
-                            ))}
-                        </select>
-                    </div>
+                    {isManager && (
+                        <div className="form-group">
+                            <label className="form-label" htmlFor="issue-assignee">Assignee</label>
+                            <select
+                                id="issue-assignee"
+                                className="form-select"
+                                value={form.assignedTo}
+                                onChange={(e) => handleChange('assignedTo', e.target.value)}
+                            >
+                                <option value="">Unassigned</option>
+                                {users.map(u => (
+                                    <option key={u.id} value={u.id}>{u.name}</option>
+                                ))}
+                            </select>
+                        </div>
+                    )}
 
                     {error && <div className="alert alert-error">{error}</div>}
 

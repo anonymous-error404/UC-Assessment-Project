@@ -338,6 +338,7 @@ export default function DashboardPage() {
                 <CreateIssueModal
                     projects={projects}
                     users={users}
+                    isManager={isManager}
                     onClose={closeCreateModal}
                     onCreated={handleIssueCreated}
                 />

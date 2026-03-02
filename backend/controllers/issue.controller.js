@@ -3,6 +3,10 @@ import { getIO } from "../socket.js";
 
 export const createIssue = async (req, res) => {
     try {
+        // Only managers can assign issues
+        if (req.user.role !== "manager") {
+            delete req.body.assignedTo;
+        }
         const issue = await issueService.createIssue(req.body, req.user.userId);
         res.status(201).json(issue);
         getIO().emit("issues:changed");
