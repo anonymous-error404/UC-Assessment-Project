@@ -4,6 +4,7 @@ import { issuesAPI, projectsAPI, usersAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useSocket } from '../hooks/useSocket';
 import CreateIssueModal from '../components/CreateIssueModal';
+import DashboardCharts from '../components/DashboardCharts';
 import './DashboardPage.css';
 
 const STATUS_CONFIG = [
@@ -178,6 +179,9 @@ export default function DashboardPage() {
                     </div>
                 ))}
             </div>
+
+            {/* Charts */}
+            <DashboardCharts />
 
             {/* Toolbar */}
             <div className="dashboard-toolbar">

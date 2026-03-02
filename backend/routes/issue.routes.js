@@ -31,4 +31,10 @@ router.post("/:id/comment", controller.addComment);
 //// STATUS COUNTS
 router.get("/stats/status", controller.statusCounts);
 
+//// PRIORITY COUNTS
+router.get("/stats/priority", controller.priorityCounts);
+
+//// PROJECT COUNTS
+router.get("/stats/project", controller.projectCounts);
+
 export default router;

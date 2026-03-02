@@ -19,6 +19,7 @@ export default function Layout() {
         const path = location.pathname;
         if (path === '/') return 'Dashboard';
         if (path === '/projects') return 'Projects';
+        if (path === '/kanban') return 'Kanban Board';
         if (path.startsWith('/issues/')) return 'Issue Details';
         return 'Dashboard';
     };
@@ -55,6 +56,15 @@ export default function Layout() {
                     >
                         <span className="sidebar-link-icon">📁</span>
                         Projects
+                    </NavLink>
+
+                    <NavLink
+                        to="/kanban"
+                        className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}
+                        onClick={() => setSidebarOpen(false)}
+                    >
+                        <span className="sidebar-link-icon">📋</span>
+                        Kanban Board
                     </NavLink>
 
                     <span className="sidebar-section-label">Quick Actions</span>

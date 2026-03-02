@@ -47,6 +47,8 @@ export const issuesAPI = {
     update: (id, data) => api.put(`/issues/${id}`, data),
     delete: (id) => api.delete(`/issues/${id}`),
     getStatusCounts: () => api.get('/issues/stats/status'),
+    getPriorityCounts: () => api.get('/issues/stats/priority'),
+    getProjectCounts: () => api.get('/issues/stats/project'),
 };
 
 // ---- Comments ----

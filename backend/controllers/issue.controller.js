@@ -77,6 +77,26 @@ export const statusCounts = async (req, res) => {
     }
 };
 
+export const priorityCounts = async (req, res) => {
+    try {
+        const data = await issueService.issuesByPriority();
+        res.json(data);
+    } catch (err) {
+        console.log(err.message);
+        res.status(500).json({ message: err.message });
+    }
+};
+
+export const projectCounts = async (req, res) => {
+    try {
+        const data = await issueService.issuesByProject();
+        res.json(data);
+    } catch (err) {
+        console.log(err.message);
+        res.status(500).json({ message: err.message });
+    }
+};
+
 export const exportCSV = async (req, res) => {
     try {
         const issues = await issueService.getIssues({});

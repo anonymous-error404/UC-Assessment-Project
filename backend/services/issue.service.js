@@ -90,3 +90,29 @@ export const getStatusCounts = async () => {
 
     return result;
 };
+
+export const issuesByPriority = async () => {
+  return await Issue.findAll({
+    attributes: [
+      "priority",
+      [Issue.sequelize.fn("COUNT", Issue.sequelize.col("Issue.id")), "count"]
+    ],
+    group: ["priority"],
+  });
+};
+
+export const issuesByProject = async () => {
+  return await Issue.findAll({
+    attributes: [
+      "projectId",
+      [Issue.sequelize.fn("COUNT", Issue.sequelize.col("Issue.id")), "count"]
+    ],
+    include: [
+      {
+        model: Project,
+        attributes: ["id", "name"]
+      }
+    ],
+    group: ["projectId", "Project.id"],
+  });
+};

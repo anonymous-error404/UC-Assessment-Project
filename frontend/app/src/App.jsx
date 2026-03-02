@@ -8,6 +8,7 @@ import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
 import IssueDetailPage from './pages/IssueDetailPage';
 import ProjectsPage from './pages/ProjectsPage';
+import KanbanPage from './pages/KanbanPage';
 
 export default function App() {
   return (
@@ -30,6 +31,7 @@ export default function App() {
               <Route path="/" element={<DashboardPage />} />
               <Route path="/issues/:id" element={<IssueDetailPage />} />
               <Route path="/projects" element={<ProjectsPage />} />
+              <Route path="/kanban" element={<KanbanPage />} />
             </Route>
 
             {/* Catch-all */}
