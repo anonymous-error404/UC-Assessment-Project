@@ -2,6 +2,10 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import authRoutes from "./routes/auth.routes.js";
+import issueRoutes from "./routes/issue.routes.js";
+import projectRoutes from "./routes/project.routes.js";
+import commentRoutes from "./routes/comment.routes.js";
+import userRoutes from "./routes/user.routes.js";
 import { sequelize } from "./models/index.js";
 
 dotenv.config();
@@ -12,8 +16,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-//// ROUTES ////
+//// ROUTES ////s
 app.use("/api/auth", authRoutes);
+app.use("/api/issues", issueRoutes);
+app.use("/api/projects", projectRoutes);
+app.use("/api/comments", commentRoutes);
+app.use("/api/users", userRoutes);
 
 //// TEST ROUTE ////
 app.get("/", (req, res) => {
