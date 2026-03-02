@@ -1,10 +1,12 @@
 import { Outlet, NavLink, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 import './Layout.css';
 
 export default function Layout() {
     const { user, logout } = useAuth();
+    const { theme, toggleTheme } = useTheme();
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const location = useLocation();
 
@@ -91,6 +93,13 @@ export default function Layout() {
                         <h1 className="topbar-title">{getPageTitle()}</h1>
                     </div>
                     <div className="topbar-actions">
+                        <div className="theme-toggle" onClick={toggleTheme} title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}>
+                            <div className="theme-toggle-track">
+                                <div className="theme-toggle-thumb">
+                                    {theme === 'dark' ? '🌙' : '☀️'}
+                                </div>
+                            </div>
+                        </div>
                         <span className={`badge badge-${user?.role || 'employee'}`}>
                             {user?.role || 'employee'}
                         </span>
