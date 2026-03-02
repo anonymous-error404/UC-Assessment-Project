@@ -1,4 +1,5 @@
 import express from "express";
+import { createServer } from "http";
 import dotenv from "dotenv";
 import cors from "cors";
 import authRoutes from "./routes/auth.routes.js";
@@ -7,16 +8,21 @@ import projectRoutes from "./routes/project.routes.js";
 import commentRoutes from "./routes/comment.routes.js";
 import userRoutes from "./routes/user.routes.js";
 import { sequelize } from "./models/index.js";
+import { initSocket } from "./socket.js";
 
 dotenv.config();
 
 const app = express();
+const httpServer = createServer(app);
+
+//// SOCKET.IO ////
+initSocket(httpServer);
 
 //// MIDDLEWARE ////
 app.use(cors());
 app.use(express.json());
 
-//// ROUTES ////s
+//// ROUTES ////
 app.use("/api/auth", authRoutes);
 app.use("/api/issues", issueRoutes);
 app.use("/api/projects", projectRoutes);
@@ -39,7 +45,7 @@ const startServer = async () => {
         console.log("✅ Models synced");
 
         const PORT = process.env.PORT || 5000;
-        app.listen(PORT, () =>
+        httpServer.listen(PORT, () =>
             console.log(`🚀 Server running on http://localhost:${PORT}`)
         );
 

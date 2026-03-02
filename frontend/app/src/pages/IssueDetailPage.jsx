@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { issuesAPI, commentsAPI, usersAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
+import { useSocket } from '../hooks/useSocket';
 import './IssueDetailPage.css';
 
 function getBadgeClass(value) {
@@ -91,6 +92,12 @@ export default function IssueDetailPage() {
         };
         load();
     }, [fetchIssue, fetchUsers]);
+
+    // Real-time: re-fetch when server emits changes
+    useSocket({
+        'issues:changed': () => fetchIssue(),
+        'comments:changed': () => fetchIssue(),
+    });
 
     const handleAddComment = async (e) => {
         e.preventDefault();

@@ -1,4 +1,5 @@
 import * as projectService from "../services/project.service.js";
+import { getIO } from "../socket.js";
 
 export const createProject = async (req, res) => {
     try {
@@ -8,6 +9,7 @@ export const createProject = async (req, res) => {
             req.user.userId
         );
         res.status(201).json(project);
+        getIO().emit("projects:changed");
     } catch (err) {
         console.log(err.message)
         res.status(400).json({ message: "Some error occured while creating project" });
@@ -41,6 +43,7 @@ export const updateProject = async (req, res) => {
             req.body
         );
         res.json(project);
+        getIO().emit("projects:changed");
     } catch (err) {
         console.log(err.message)
         res.status(400).json({ message: "Error updating project" });
@@ -51,6 +54,7 @@ export const deleteProject = async (req, res) => {
     try {
         await projectService.deleteProject(req.params.id);
         res.json({ message: "Project deleted" });
+        getIO().emit("projects:changed");
     } catch (err) {
         console.log(err.message)
         res.status(400).json({ message: "Error deleting project" });

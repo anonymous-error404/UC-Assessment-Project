@@ -1,4 +1,5 @@
 import * as commentService from "../services/comment.service.js";
+import { getIO } from "../socket.js";
 
 //// ADD COMMENT ////
 export const addComment = async (req, res) => {
@@ -10,6 +11,7 @@ export const addComment = async (req, res) => {
         });
 
         res.status(201).json(comment);
+        getIO().emit("comments:changed", { issueId: req.params.issueId });
 
     } catch (err) {
         res.status(400).json({ message: err.message });
@@ -31,6 +33,7 @@ export const deleteComment = async (req, res) => {
     try {
         await commentService.deleteComment(req.params.commentId);
         res.json({ message: "Comment deleted" });
+        getIO().emit("comments:changed", { commentId: req.params.commentId });
     } catch (err) {
         res.status(400).json({ message: err.message });
     }

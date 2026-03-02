@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { issuesAPI, projectsAPI, usersAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
+import { useSocket } from '../hooks/useSocket';
 import CreateIssueModal from '../components/CreateIssueModal';
 import './DashboardPage.css';
 
@@ -99,6 +100,17 @@ export default function DashboardPage() {
         };
         loadAll();
     }, [fetchIssues, fetchStats, fetchDropdownData]);
+
+    // Real-time: re-fetch when server emits changes
+    useSocket({
+        'issues:changed': () => {
+            fetchIssues();
+            fetchStats();
+        },
+        'projects:changed': () => {
+            fetchDropdownData();
+        },
+    });
 
     const handleFilterChange = (key, value) => {
         setFilters(prev => ({ ...prev, [key]: value }));
