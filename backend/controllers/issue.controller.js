@@ -76,3 +76,39 @@ export const statusCounts = async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 };
+
+export const exportCSV = async (req, res) => {
+    try {
+        const issues = await issueService.getIssues({});
+
+        const headers = ["Title", "Description", "Project", "Priority", "Status", "Assignee", "Created By", "Created At"];
+
+        const escapeCSV = (val) => {
+            if (val == null) return "";
+            const str = String(val);
+            if (str.includes(",") || str.includes('"') || str.includes("\n")) {
+                return `"${str.replace(/"/g, '""')}"`;
+            }
+            return str;
+        };
+
+        const rows = issues.map(issue => [
+            escapeCSV(issue.title),
+            escapeCSV(issue.description),
+            escapeCSV(issue.Project?.name),
+            escapeCSV(issue.priority),
+            escapeCSV(issue.status),
+            escapeCSV(issue.assignee?.name || "Unassigned"),
+            escapeCSV(issue.creator?.name),
+            escapeCSV(issue.createdAt ? new Date(issue.createdAt).toISOString() : ""),
+        ]);
+
+        const csv = [headers.join(","), ...rows.map(r => r.join(","))].join("\n");
+
+        res.setHeader("Content-Type", "text/csv");
+        res.setHeader("Content-Disposition", "attachment; filename=issues_export.csv");
+        res.send(csv);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};

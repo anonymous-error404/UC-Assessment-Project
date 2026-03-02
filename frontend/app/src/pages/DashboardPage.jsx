@@ -240,9 +240,35 @@ export default function DashboardPage() {
                     </select>
                 </div>
 
-                <button className="btn btn-primary" onClick={openCreateModal}>
-                    ➕ New Issue
-                </button>
+                <div style={{ display: 'flex', gap: 'var(--space-3)' }}>
+                    {isManager && (
+                        <button
+                            className="btn btn-secondary"
+                            onClick={async () => {
+                                try {
+                                    const token = localStorage.getItem('token');
+                                    const res = await fetch('http://localhost:8080/api/issues/export/csv', {
+                                        headers: { Authorization: `Bearer ${token}` },
+                                    });
+                                    const blob = await res.blob();
+                                    const url = URL.createObjectURL(blob);
+                                    const a = document.createElement('a');
+                                    a.href = url;
+                                    a.download = 'issues_export.csv';
+                                    a.click();
+                                    URL.revokeObjectURL(url);
+                                } catch {
+                                    setError('Failed to export CSV.');
+                                }
+                            }}
+                        >
+                            📥 Export CSV
+                        </button>
+                    )}
+                    <button className="btn btn-primary" onClick={openCreateModal}>
+                        ➕ New Issue
+                    </button>
+                </div>
             </div>
 
             {error && <div className="alert alert-error" style={{ marginBottom: 16 }}>{error}</div>}

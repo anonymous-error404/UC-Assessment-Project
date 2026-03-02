@@ -13,6 +13,9 @@ router.post("/", allowRoles("employee", "manager"), controller.createIssue);
 //// GET ISSUES (Dashboard)
 router.get("/", controller.getIssues);
 
+//// EXPORT CSV (Manager only)
+router.get("/export/csv", allowRoles("manager"), controller.exportCSV);
+
 //// GET ISSUE DETAILS
 router.get("/:id", controller.getIssueById);
 
